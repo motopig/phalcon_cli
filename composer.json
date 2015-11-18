@@ -1,0 +1,23 @@
+{
+    "name": "hehe",
+    "description": "composer test",
+    "keywords": [],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+       "slim/slim": "2.*",
+       "predis/predis" : "*",
+       "pda/pheanstalk" : "*"
+    },
+    "require-dev": {
+        
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        
+    }
+}
