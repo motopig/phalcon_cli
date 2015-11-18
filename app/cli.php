@@ -4,35 +4,46 @@
 use Phalcon\DI\FactoryDefault\CLI as CliDI,
     Phalcon\CLI\Console as ConsoleApp;
 
-define('VERSION', '1.0.0');
-
 $di = new CliDI();
 
 defined('APPLICATION_PATH')
 || define('APPLICATION_PATH', realpath(dirname(__FILE__)));
 
-require '../vendor/autoload.php';
+require dirname(dirname(__FILE__)).'/vendor/autoload.php';
 require APPLICATION_PATH.'/library/common.php';
 
-$loader = new \Phalcon\Loader();
-$loader->registerDirs(
-    array(
-        APPLICATION_PATH . '/tasks',
-        APPLICATION_PATH . '/model',
-    )
-);
-$loader->register();
+define_con($argv);
+regster_autoload();
 
-if (is_readable(APPLICATION_PATH . '/config/config.php')) {
-    $config = include APPLICATION_PATH . '/config/config.php';
-    $di->set('config', $config);
-}
+$config = get_config('config');
+$di->set('config', $config);
+
+//queue
+
+
+//beanstalk
+$di->set('beanstalk',function()use($config){
+    $config = $config['beanstalk'];
+    return new Pheanstalk\Pheanstalk($config['host'],$config['port'],$config['connectTimeout']);
+});
+
+//redis
+$di->set('redis',function()use($config){
+    $config = $config['redis'];
+    return new  Predis\Client($config['servers']['host']));
+});
+
+
+$di->set('dispatcher', function () {
+    $dispatcher = new Phalcon\CLI\Dispatcher();
+    $dispatcher->setDefaultNamespace("App\Task");
+    return $dispatcher;
+});
 
 $console = new ConsoleApp();
 $console->setDI($di);
 
-get_arguments();
-define_con();
+$arguments = get_arguments($argv);
 
 $di->setShared('console', $console);
 

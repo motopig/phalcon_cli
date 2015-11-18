@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Task;
 use Pheanstalk\Pheanstalk;
 
 

@@ -13,6 +13,26 @@ function define_con($argv)
 }
 
 /**
+ * 类自动载入
+ */
+function regster_autoload()
+{
+    //composer
+    require dirname(APPLICATION_PATH).'/vendor/autoload.php';
+    //phalcon loader
+    $loader = new \Phalcon\Loader();
+    $loader->registerNamespaces(
+        array(
+            'Library' => APPLICATION_PATH.'/library/',
+            'App\Task' => APPLICATION_PATH.'/tasks',
+            'App\Model' => APPLICATION_PATH.'/model',
+        )
+    );
+    $loader->register();
+}
+
+
+/**
  * 获取配置信息
  * @param $name
  * @return mixed
