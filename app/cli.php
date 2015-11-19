@@ -19,7 +19,9 @@ $config = get_config('config');
 $di->set('config', $config);
 
 //queue
-
+$di->set('queue',function()use($config){
+    return new Library\Queue\beanstalk($config['beanstalk']);
+});
 
 //beanstalk
 $di->set('beanstalk',function()use($config){

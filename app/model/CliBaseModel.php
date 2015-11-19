@@ -7,6 +7,7 @@ class CliBaseModel extends Model
 {
     protected $table_name = '';
     protected $config = '';
+
     public function initialize()
     {
         $this->config = $this->getDI()->get('config');
